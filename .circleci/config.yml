@@ -9,7 +9,7 @@ jobs:
       - run: unzip terraform_0.11.10_linux_amd64.zip
       - run: rm terraform_0.11.10_linux_amd64.zip
       - run: echo 'export PATH=$(pwd):$PATH' > .tfpath
-      - run: source .tfpath
+      - run: source ./.tfpath
       - run: terraform version
       - run: go env
       - run: go get -v ./...
