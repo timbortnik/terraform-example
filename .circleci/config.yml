@@ -6,9 +6,6 @@ jobs:
     steps:
       - checkout
 
-      # AWS CLI
-      - run: sudo apt install -y awscli
-
       # Terraform
       - run: wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
       - run: unzip terraform_0.11.10_linux_amd64.zip
@@ -19,6 +16,7 @@ jobs:
       # Go
       - run: go env
       - run: go get -v ./...
+      - run: go get github.com/tebeka/go2xunit
 
-      # AWS check
-      - run: aws ec2 describe-instances
+      # Execute tests
+      - run: ./test.sh
