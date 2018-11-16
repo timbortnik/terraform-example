@@ -1,15 +1,24 @@
 variable "public_key_path" {
   description = <<DESCRIPTION
 Path to the SSH public key to be used for authentication.
-Ensure this keypair is added to your local SSH agent so provisioners can
-connect.
-
 Example: ~/.ssh/terraform.pub
+DESCRIPTION
+}
+
+variable "private_key_path" {
+  description = <<DESCRIPTION
+Path to the SSH private key to be used for authentication.
+Example: ~/.ssh/id_rsa
 DESCRIPTION
 }
 
 variable "key_name" {
   description = "Desired name of AWS key pair"
+}
+
+variable "instance_name" {
+  description = "Desired name of EC2 instance"
+  default     = "Two-tier test backend"
 }
 
 variable "aws_region" {

@@ -109,6 +109,7 @@ resource "aws_instance" "web" {
     # The default username for our AMI
     user = "ubuntu"
 
+    private_key = "${file(var.private_key_path)}"
     # The connection will use the local SSH agent for authentication.
   }
 
@@ -138,5 +139,10 @@ resource "aws_instance" "web" {
       "sudo apt-get -y install nginx",
       "sudo service nginx start",
     ]
+  }
+
+  # We would like to have a meaningful name for the instance
+  tags {
+    Name = "${var.instance_name}"
   }
 }
