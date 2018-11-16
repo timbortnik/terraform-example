@@ -6,7 +6,6 @@ jobs:
     environment:
       - BASH_ENV: ~/.bashrc
     steps:
-    steps:
       - checkout
       - run: echo 'export PATH=$(pwd):$PATH' >> $BASH_ENV
       - run: wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
