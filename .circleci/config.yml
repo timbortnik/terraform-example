@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/golang:1.11
+    steps:
+      - checkout
+      - run: wget https://releases.hashicorp.com/terraform/0.11.10/terraform_0.11.10_linux_amd64.zip
+      - run: unzip terraform_0.11.10_linux_amd64.zip
+      - run: rm terraform_0.11.10_linux_amd64.zip
+      - run: echo 'export PATH=$(pwd):$PATH' >> $BASH_ENV
+      - run: terraform version
+      - run: go env
+      - run: go get -v ./...
