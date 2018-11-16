@@ -16,7 +16,3 @@ jobs:
       # Go
       - run: go env
       - run: go get -v ./...
-
-      # Terraform init + plan
-      - run: cd two-tier && terraform init -input=false
-      - run: cd two-tier && terraform plan -input=false
