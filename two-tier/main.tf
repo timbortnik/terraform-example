@@ -141,7 +141,7 @@ resource "aws_instance" "web" {
     ]
   }
 
-  We would like to have a meaningful name for the instance
+  # We would like to have a meaningful name for the instance
   tags {
      Name = "${var.instance_name}"
   }
