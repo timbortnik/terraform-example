@@ -19,4 +19,4 @@ jobs:
 
       # Terraform init + plan
       - run: cd two-tier && terraform init
-      - run: cd two-tier && perraform plan
+      - run: cd two-tier && terraform plan
