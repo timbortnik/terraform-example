@@ -20,3 +20,7 @@ jobs:
 
       # Execute tests
       - run: ./test.sh
+
+      # Upload results
+      - store_test_results: 
+          path: ./test-results

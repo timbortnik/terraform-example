@@ -1,6 +1,6 @@
 #!/bin/bash
 
-go test -v ./... > test-result.txt
+go test -v ./... > ./test-results/test-result.txt
 test_result=$?
-cat test-result.txt |go2xunit |tee test-result.xml
+cat ./test-results/test-result.txt |go2xunit |tee ./test-results/test-result.xml
 exit $test_result
