@@ -14,9 +14,6 @@ import (
 )
 
 func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
-
-	t.Parallel()
-
 	// Run `terraform output` to get the value of an output variable
 	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
 
@@ -54,9 +51,6 @@ func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyP
 }
 
 func testSCPToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
-
-	t.Parallel()
-
 	// Run `terraform output` to get the value of an output variable
 	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
 
@@ -98,9 +92,6 @@ func testSCPToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyP
 }
 
 func testSSHAgentToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
-
-	t.Parallel()
-
 	// Run `terraform output` to get the value of an output variable
 	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
 

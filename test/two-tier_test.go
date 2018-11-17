@@ -13,9 +13,8 @@ import (
 // (e.g., skip stage "teardown" by setting the environment variable "SKIP_teardown=true"), which speeds up iteration
 // when running this test over and over again locally.
 func TestTerraformSshExample(t *testing.T) {
-	t.Parallel()
 
-	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../", ".")
+	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../two-tier", ".")
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer test_structure.RunTestStage(t, "teardown", func() {

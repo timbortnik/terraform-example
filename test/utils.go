@@ -23,7 +23,7 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 
 	// Pick a random AWS region to test in. This helps ensure your code works in all regions.
 	// awsRegion := aws.GetRandomRegion(t, []string{"eu-west-1", "us-east-1", "us-west-1", "us-west-2"}, nil)
-	awsRegion := aws.GetRandomRegion(t, []string{"us-east-1"}, nil)
+	awsRegion := aws.GetRandomRegion(t, []string{"us-west-1"}, nil)
 
 	// Create an EC2 KeyPair that we can use for SSH access
 	keyPairName := fmt.Sprintf("terratest-ssh-example-%s", uniqueID)
@@ -32,11 +32,11 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 
 	keyPair := &aws.Ec2Keypair{Name: keyPairName, Region: awsRegion, KeyPair: sshKeyPair}
 
-	keyPathPublic := exampleFolder + "/key.pub"
+	keyPathPublic := exampleFolder + "/.test-data/key.pub"
 	ioErrPublic := ioutil.WriteFile(keyPathPublic, []byte(keyPair.PublicKey), 0644)
 	require.Nil(t, ioErrPublic, "Failed to write public key file")
 
-	keyPathPrivate := exampleFolder + "/key"
+	keyPathPrivate := exampleFolder + "/.test-data/key"
 	ioErrPrivate := ioutil.WriteFile(keyPathPrivate, []byte(keyPair.PrivateKey), 0600)
 	require.Nil(t, ioErrPrivate, "Failed to write private key file")
 
