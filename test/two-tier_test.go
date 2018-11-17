@@ -12,7 +12,7 @@ import (
 // shows an example of how to break a test down into "stages" so you can skip stages by setting environment variables
 // (e.g., skip stage "teardown" by setting the environment variable "SKIP_teardown=true"), which speeds up iteration
 // when running this test over and over again locally.
-func TestTerraformSshExample(t *testing.T) {
+func TestTerraformTwoTier(t *testing.T) {
 
 	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../two-tier", ".")
 
