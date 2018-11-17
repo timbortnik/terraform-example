@@ -32,13 +32,13 @@ func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyP
 
 	// Verify that we can SSH to the Instance and run commands
 	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
-		_, err := ssh.CheckSshCommandE(t, publicHost, command)
+		output, err := ssh.CheckSshCommandE(t, publicHost, command)
 
 		if err != nil {
 			return "", err
 		}
 
-		return "", nil
+		return output, nil
 	})
 }
 
