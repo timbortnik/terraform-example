@@ -21,6 +21,9 @@ jobs:
       # Execute tests
       - run: ./test.sh
 
+      # Debug
+      - run: pwd
+
       # Upload results
       - store_test_results: 
           path: ./test-results
