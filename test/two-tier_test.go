@@ -12,10 +12,9 @@ import (
 // shows an example of how to break a test down into "stages" so you can skip stages by setting environment variables
 // (e.g., skip stage "teardown" by setting the environment variable "SKIP_teardown=true"), which speeds up iteration
 // when running this test over and over again locally.
-func TestTerraformSshExample(t *testing.T) {
-	t.Parallel()
+func TestTerraformTwoTier(t *testing.T) {
 
-	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../", ".")
+	exampleFolder := test_structure.CopyTerraformFolderToTemp(t, "../two-tier", ".")
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
 	defer test_structure.RunTestStage(t, "teardown", func() {
@@ -48,12 +47,12 @@ func TestTerraformSshExample(t *testing.T) {
 			testSSHToPublicHost(t, terraformOptions, keyPair)
 		})
 
-		t.Run("SSH agent to public host", func(t *testing.T) {
-			testSSHAgentToPublicHost(t, terraformOptions, keyPair)
-		})
-
 		t.Run("SCP to public host", func(t *testing.T) {
 			testSCPToPublicHost(t, terraformOptions, keyPair)
+		})
+
+		t.Run("HTTP to ELB", func(t *testing.T) {
+			testHTTPToELB(t, terraformOptions)
 		})
 	})
 
