@@ -22,7 +22,7 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 
 	// Pick a random AWS region to test in. This helps ensure your code works in all regions.
 	// awsRegion := aws.GetRandomRegion(t, []string{"eu-west-1", "us-east-1", "us-west-1", "us-west-2"}, nil)
-	awsRegion := aws.GetRandomRegion(t, []string{"us-west-1"}, nil)
+	awsRegion := aws.GetRandomRegion(t, []string{"us-west-2"}, nil)
 
 	// Create an EC2 KeyPair that we can use for SSH access
 	keyPairName := fmt.Sprintf("terratest-ssh-example-%s", uniqueID)
