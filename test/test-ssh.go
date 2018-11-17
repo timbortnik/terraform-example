@@ -13,7 +13,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair) {
+func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyPair *aws.Ec2Keypair, command string) {
 	// Run `terraform output` to get the value of an output variable
 	publicInstanceIP := terraform.Output(t, terraformOptions, "public_instance_ip")
 
@@ -30,20 +30,12 @@ func testSSHToPublicHost(t *testing.T, terraformOptions *terraform.Options, keyP
 	timeBetweenRetries := 5 * time.Second
 	description := fmt.Sprintf("SSH to public host %s", publicInstanceIP)
 
-	// Run a simple echo command on the server
-	expectedText := "Hello, World"
-	command := fmt.Sprintf("echo -n '%s'", expectedText)
-
 	// Verify that we can SSH to the Instance and run commands
 	retry.DoWithRetry(t, description, maxRetries, timeBetweenRetries, func() (string, error) {
-		actualText, err := ssh.CheckSshCommandE(t, publicHost, command)
+		_, err := ssh.CheckSshCommandE(t, publicHost, command)
 
 		if err != nil {
 			return "", err
-		}
-
-		if strings.TrimSpace(actualText) != expectedText {
-			return "", fmt.Errorf("Expected SSH command to return '%s' but got '%s'", expectedText, actualText)
 		}
 
 		return "", nil

@@ -137,6 +137,8 @@ resource "aws_instance" "web" {
     inline = [
       "sudo apt-get -y update",
       "sudo apt-get -y install nginx",
+      "echo 'set_real_ip_from  0.0.0.0/0;' > /etc/nginx/conf.d/forwarded.conf",
+      "echo 'real_ip_header    X-Forwarded-For;' >> /etc/nfinx/conf.d/forwarded.conf",
       "sudo service nginx start",
     ]
   }
