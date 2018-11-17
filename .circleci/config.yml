@@ -22,8 +22,8 @@ jobs:
       - run: ./test.sh
 
       # Upload results
-      - store_test_results:
-        path: ./test-results
+      - store_test_results: 
+          path: ./test-results
 
       - store_artifacts:
-        path: ./test-results/test-results.xml
+          path: ./test-results/test-results.xml
