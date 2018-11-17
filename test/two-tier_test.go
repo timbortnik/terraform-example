@@ -47,10 +47,6 @@ func TestTerraformSshExample(t *testing.T) {
 			testSSHToPublicHost(t, terraformOptions, keyPair)
 		})
 
-		t.Run("SSH agent to public host", func(t *testing.T) {
-			testSSHAgentToPublicHost(t, terraformOptions, keyPair)
-		})
-
 		t.Run("SCP to public host", func(t *testing.T) {
 			testSCPToPublicHost(t, terraformOptions, keyPair)
 		})
