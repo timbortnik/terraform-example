@@ -1,11 +1,13 @@
 package test
 
 import (
+	"io/ioutil"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
+	"github.com/stretchr/testify/require"
 )
 
 // An example of how to test the Terraform module in examples/terraform-ssh-example using Terratest. The test also
@@ -27,11 +29,17 @@ func TestTerraformTwoTier(t *testing.T) {
 
 	// Deploy the example
 	test_structure.RunTestStage(t, "setup", func() {
-		terraformOptions, keyPair := configureTerraformOptions(t, exampleFolder)
+		terraformOptions, keyPair, keyPathPublic, keyPathPrivate := configureTerraformOptions(t, exampleFolder)
 
 		// Save the options and key pair so later test stages can use them
 		test_structure.SaveTerraformOptions(t, exampleFolder, terraformOptions)
 		test_structure.SaveEc2KeyPair(t, exampleFolder, keyPair)
+
+		ioErrPublic := ioutil.WriteFile(keyPathPublic, []byte(keyPair.PublicKey), 0644)
+		require.Nil(t, ioErrPublic, "Failed to write public key file")
+
+		ioErrPrivate := ioutil.WriteFile(keyPathPrivate, []byte(keyPair.PrivateKey), 0600)
+		require.Nil(t, ioErrPrivate, "Failed to write private key file")
 
 		// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 		terraform.InitAndApply(t, terraformOptions)
