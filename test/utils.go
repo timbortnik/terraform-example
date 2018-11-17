@@ -2,7 +2,6 @@ package test
 
 import (
 	"fmt"
-	"io/ioutil"
 	"testing"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
@@ -12,7 +11,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.Options, *aws.Ec2Keypair) {
+func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.Options, *aws.Ec2Keypair, string, string) {
 	// A unique ID we can use to namespace resources so we don't clash with anything already in the AWS account or
 	// tests running in parallel
 	uniqueID := random.UniqueId()
@@ -33,12 +32,7 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 	keyPair := &aws.Ec2Keypair{Name: keyPairName, Region: awsRegion, KeyPair: sshKeyPair}
 
 	keyPathPublic := exampleFolder + "/.test-data/key.pub"
-	ioErrPublic := ioutil.WriteFile(keyPathPublic, []byte(keyPair.PublicKey), 0644)
-	require.Nil(t, ioErrPublic, "Failed to write public key file")
-
 	keyPathPrivate := exampleFolder + "/.test-data/key"
-	ioErrPrivate := ioutil.WriteFile(keyPathPrivate, []byte(keyPair.PrivateKey), 0600)
-	require.Nil(t, ioErrPrivate, "Failed to write private key file")
 
 	terraformOptions := &terraform.Options{
 		// The path to where our Terraform code is located
@@ -54,5 +48,5 @@ func configureTerraformOptions(t *testing.T, exampleFolder string) (*terraform.O
 		},
 	}
 
-	return terraformOptions, keyPair
+	return terraformOptions, keyPair, keyPathPublic, keyPathPrivate
 }
