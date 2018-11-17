@@ -55,6 +55,10 @@ func TestTerraformSshExample(t *testing.T) {
 		t.Run("SCP to public host", func(t *testing.T) {
 			testSCPToPublicHost(t, terraformOptions, keyPair)
 		})
+
+		t.Run("HTTP to ELB", func(t *testing.T) {
+			testHTTPToELB(t, terraformOptions)
+		})
 	})
 
 }
