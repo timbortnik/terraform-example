@@ -83,7 +83,7 @@ resource "aws_security_group" "default" {
 }
 
 resource "aws_elb" "web" {
-  name = "terraform-example-elb"
+  name = "${var.instance_name}-elb"
 
   subnets         = ["${aws_subnet.default.id}"]
   security_groups = ["${aws_security_group.elb.id}"]
@@ -137,7 +137,9 @@ resource "aws_instance" "web" {
     inline = [
       "sudo apt-get -y update",
       "sudo apt-get -y install nginx",
-      "sudo service nginx start",
+      "echo 'set_real_ip_from  0.0.0.0/0;' |sudo tee /etc/nginx/conf.d/forwarded.conf",
+      "echo 'real_ip_header    X-Forwarded-For;' |sudo tee -a /etc/nginx/conf.d/forwarded.conf",
+      "sudo service nginx restart",
     ]
   }
 

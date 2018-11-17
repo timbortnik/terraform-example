@@ -51,8 +51,8 @@ func TestTerraformTwoTier(t *testing.T) {
 		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
 		keyPair := test_structure.LoadEc2KeyPair(t, exampleFolder)
 
-		t.Run("SSH to public host", func(t *testing.T) {
-			testSSHToPublicHost(t, terraformOptions, keyPair)
+		t.Run("SSH to public host and adjust nginx log settings", func(t *testing.T) {
+			testSSHToPublicHost(t, terraformOptions, keyPair, "echo 123")
 		})
 
 		t.Run("SCP to public host", func(t *testing.T) {
