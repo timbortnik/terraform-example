@@ -1,12 +1,18 @@
 package test
 
 import (
+	"fmt"
 	"io/ioutil"
 	"testing"
+	"time"
 
 	"github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/gruntwork-io/terratest/modules/http-helper"
+	"github.com/gruntwork-io/terratest/modules/logger"
+	"github.com/gruntwork-io/terratest/modules/retry"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/gruntwork-io/terratest/modules/test-structure"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -51,17 +57,46 @@ func TestTerraformTwoTier(t *testing.T) {
 		terraformOptions := test_structure.LoadTerraformOptions(t, exampleFolder)
 		keyPair := test_structure.LoadEc2KeyPair(t, exampleFolder)
 
-		t.Run("SSH to public host and adjust nginx log settings", func(t *testing.T) {
-			testSSHToPublicHost(t, terraformOptions, keyPair, "echo 123")
+		t.Run("HTTP to ELB", func(t *testing.T) {
+			testHTTPToELB(t, terraformOptions)
 		})
 
 		t.Run("SCP to public host", func(t *testing.T) {
 			testSCPToPublicHost(t, terraformOptions, keyPair)
 		})
 
-		t.Run("HTTP to ELB", func(t *testing.T) {
-			testHTTPToELB(t, terraformOptions)
+		t.Run("SSH to public host", func(t *testing.T) {
+			testSSHToPublicHost(t, terraformOptions, keyPair, "echo 123")
+		})
+
+		t.Run("Check Nginx access log for external ip", func(t *testing.T) {
+
+			// Get test external ip from ipfy
+			ipURL := "https://api.ipify.org"
+			// ipify is a thurd party service, so retry a few times, just in case
+			maxRetries := 5
+			timeBetweenRetries := 5 * time.Second
+			getIP := func() (string, error) {
+				code, myIP := http_helper.HttpGet(t, ipURL)
+				if 200 == code {
+					return myIP, nil
+				}
+				return myIP, fmt.Errorf("Status code:%d", code)
+			}
+			externalIP := retry.DoWithRetry(t, "Get external ip from ipify", maxRetries, timeBetweenRetries, getIP)
+			logger.Log(t, "My IP address: ", externalIP)
+
+			sshResult := testSSHToPublicHost(t, terraformOptions, keyPair,
+				fmt.Sprintf("cat /var/log/nginx/access.log |grep -c %s", externalIP))
+			logger.Log(t, sshResult)
+			assert.NotEqual(t, "0", sshResult, "External ip not found in access log")
+		})
+
+		t.Run("Check Nginx listens on localhost", func(t *testing.T) {
+			sshResult := testSSHToPublicHost(t, terraformOptions, keyPair,
+				"curl -sIXGET http://localhost |grep -c nginx")
+			logger.Log(t, sshResult)
+			assert.Equal(t, "1\n", sshResult, "Nginx does not respond on http://localhost")
 		})
 	})
-
 }
