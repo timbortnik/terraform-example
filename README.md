@@ -23,7 +23,7 @@ Two-tier terrform template example was modified to
 CI
 --
 
-CircleCI runs tests on push
+CircleCI runs tests on branches 
 [![CircleCI](https://circleci.com/gh/timbortnik/terraform-example.svg?style=svg)](https://circleci.com/gh/timbortnik/terraform-example)
 
 Tests
