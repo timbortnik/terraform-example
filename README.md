@@ -30,8 +30,13 @@ Tests
 -----
 
 This repo should be clonet to go path
+
 Dependencies can be installed by ./test-setup.sh
+
 Tests can be executed by ./test.sh
+
+Partial execution (skipping setup/teardown) can be executed by ./test-only.sh
+
 test-results folder contains test-result.xml, junit-compatible
 
 ```
