@@ -30,8 +30,11 @@ Tests
 -----
 
 This repo should be clonet to go path
+
 Dependencies can be installed by ./test-setup.sh
+
 Tests can be executed by ./test.sh
+
 test-results folder contains test-result.xml, junit-compatible
 
 ```
