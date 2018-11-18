@@ -92,11 +92,30 @@ func TestTerraformTwoTier(t *testing.T) {
 			assert.NotEqual(t, "0", sshResult, "External ip not found in access log")
 		})
 
+		t.Run("Check Nginx access log for URL path", func(t *testing.T) {
+			testPath := "/some-weird/path"
+			// Run `terraform output` to get the value of an output variable
+			testURL := "http://" + terraform.Output(t, terraformOptions, "address") + testPath
+			http_helper.HttpGet(t, testURL)
+
+			sshResult := testSSHToPublicHost(t, terraformOptions, keyPair,
+				fmt.Sprintf("cat /var/log/nginx/access.log |grep %s", testPath))
+			logger.Log(t, sshResult)
+			assert.Contains(t, sshResult, testPath, "Nginx log does not contain URL path")
+		})
+
 		t.Run("Check Nginx listens on localhost", func(t *testing.T) {
 			sshResult := testSSHToPublicHost(t, terraformOptions, keyPair,
 				"curl -sIXGET http://localhost |grep -c nginx")
 			logger.Log(t, sshResult)
 			assert.Equal(t, "1\n", sshResult, "Nginx does not respond on http://localhost")
+		})
+
+		t.Run("Check Nginx worker_processes auto setting", func(t *testing.T) {
+			sshResult := testSSHToPublicHost(t, terraformOptions, keyPair,
+				"sudo nginx -T |grep worker_processes")
+			logger.Log(t, sshResult)
+			assert.Contains(t, sshResult, "worker_processes auto;", "Nginx worker_processes is not auto")
 		})
 	})
 }
