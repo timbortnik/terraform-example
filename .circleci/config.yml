@@ -3,8 +3,6 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.11
-    environment:
-      CIRCLE_REPOSITORY_URL: https://github.com/timbortnik/terraform-example
     steps:
       - checkout
       
