@@ -4,6 +4,7 @@ jobs:
     docker:
       - image: circleci/golang:1.11
     steps:
+      - run: git config --global url."https://github.com".insteadOf "ssh://git@github.com" || true
       - checkout
 
       # Terraform
